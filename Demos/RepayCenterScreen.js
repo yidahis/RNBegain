@@ -1,4 +1,4 @@
-import React ,{ Component } from 'react';
+import React, {Component} from 'react';
 import {
     View,
     Text,
@@ -15,7 +15,7 @@ import RepayModeView from '../Demos/RepayModeView'
 
 class SectionHeader extends React.Component {
     render() {
-        
+
         return (
             <View style={SectionHeaderStyles.con}>
                 <Text style={SectionHeaderStyles.text}>{this.props.title}</Text>
@@ -48,8 +48,8 @@ const SectionHeaderStyles = {
         includeFontPadding: false,
         textAlignVertical: 'center',
         fontWeight: 'bold',
-       
-        color: '#333333',
+
+        color: '#333333'
     }
 };
 
@@ -97,7 +97,8 @@ class Cell extends React.Component {
                             textColor='#666666'
                             hasQuestion={this.props.hasQuestion}/>
 
-                        <RowText content={this.props.rightText} isRight='true'/>
+                        <RowText content={this.props.rightText} isRight='true'/> 
+                        
                         {img}
 
                     </View>
@@ -158,17 +159,19 @@ const CellStyles = {
 };
 
 export default class RepayCenterScreen extends React.Component {
-    
+
     //还款方式
     state = {
         repayModeVisible: false,
-        text: '100.00',
+        text: '100.00'
     };
 
     constructor(props) {
         super(props)
         // this.closeRepayMode=this.props.closeRepayMode.bind(this)
-        this.setState=this.setState.bind(this)
+        this.setState = this
+            .setState
+            .bind(this)
     }
 
     static navigationOptions = {
@@ -177,8 +180,8 @@ export default class RepayCenterScreen extends React.Component {
     };
 
     componentDidUpdate(prevProps) {
-        console.log(prevProps)
-  }
+       
+    }
 
     render() {
         return (
@@ -215,14 +218,14 @@ export default class RepayCenterScreen extends React.Component {
                             }}
                                 onChangeText={(text) => this.setState({text})}
                                 value={this.state.text}/>
-                           
+
                             <SectionHeader title='待还详情'/>
 
                             <View >
                                 <Cell leftText='还款计划(偿还2期)' rightText='2313.23元' hasArr='true'/>
                                 <Cell leftText='部分还款' rightText='-200.23元'/>
                                 <Cell leftText='逾期费用' rightText='+46.2元' hasQuestion='true'/>
-                                <SectionFooter />
+                                <SectionFooter/>
                             </View>
 
                             {/* <Button onPress={() => this.props.navigation.push('RepayCenter')} title='点我' style={{marginTop: 140}}/> */}
@@ -242,7 +245,7 @@ export default class RepayCenterScreen extends React.Component {
                             <SectionHeader title='优惠券详情'/>
                             <Cell leftText='还款现金券' rightText='-5元' hasArr='true'/>
                             <Cell leftText='借款免息券(每期结清生效)' rightText='-13.5元'/>
-                            <SectionFooter />
+                            <SectionFooter/>
                         </View>
                         <View
                             style={{
@@ -269,20 +272,33 @@ export default class RepayCenterScreen extends React.Component {
                         </View>
 
                     </TouchableHighlight>
-                    <TouchableHighlight onPress={() => {this.setState({repayModeVisible: true})} } underlayColor='#f5f5f5'>
+                    <TouchableHighlight
+                        onPress={() => {
+                        this.setState({repayModeVisible: true})
+                    }}
+                        underlayColor='#f5f5f5'>
                         <View style={styles.bottomButton}>
                             <Text style={styles.bottomText}>确认还款2700.00元</Text>
                         </View>
                     </TouchableHighlight>
                 </View>
-                <RepayModeView visible={this.state.repayModeVisible} callback={() => {this.setState({repayModeVisible: false})} }/>
+                <RepayModeView
+                    visible={this.state.repayModeVisible}
+                    callback={() => {
+                    this.setState({repayModeVisible: false})
+                }}
+                    selectCallBack={(selectIndex) => {
+                
+                        this.props.navigation.push('OneKeyRepay');
+                    }}
+                />
             </SafeAreaView>
 
         );
     }
 
-    closeRepayMode(){
-        alert(12313)
+    closeRepayMode() {
+        // alert(12313)
         this.setState({repayModeVisible: false})
     }
 }

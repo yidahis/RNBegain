@@ -12,6 +12,7 @@ import AnimationFadeInScreen from '../Demos/AnimationFadeInScreen'
 import Mixture from '../Demos/Mixture'
 import AnimatedDecay from '../Demos/AnimatedDecay'
 import ModalDemo from '../Demos/ModalDemo'
+import OneKeyRepayScreen from '../Demos/OneKeyRepayScreen'
 
 const Left = ({onPress}) => (
     <TouchableHighlight
@@ -198,6 +199,9 @@ const AppNavigator = createStackNavigator({
     },
     ModalDemo :{
         screen: ModalDemo
+    },
+    OneKeyRepay: {
+        screen: OneKeyRepayScreen
     },
 }, {
     initialRouteName: 'Demos',

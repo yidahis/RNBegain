@@ -73,78 +73,79 @@ class Overlay extends Component < OverlayProps > {
 
 class Cell extends React.Component {
     _onPressItem = () => {
-        if(this.props.onPressItem){
-            this.props.onPressItem(this.props.index)
+
+        if (this.props.onPressItem) {
+            this
+                .props
+                .onPressItem(this.props.index)
         }
-        
     }
 
-    
     render() {
         return (
-            <TouchableOpacity onPress={ this._onPressItem}>
-                <View
-                style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                backgroundColor: '#fff',
-                height: 64,
-                borderTopWidth: 1,
-                borderTopColor: '#f5f5f5'
-            }}>
-                <Image
-                    style={{
-                    height: 35,
-                    width: 35,
-                    marginLeft: 15,
-                    marginTop: 14.5
-                }}
-                    source={ this.props.item.icon }/>
+            <TouchableOpacity onPress={this._onPressItem}>
                 <View
                     style={{
                     flexDirection: 'row',
-                    justifyContent: 'flex-start',
-                    flex: 1
+                    justifyContent: 'flex-end',
+                    backgroundColor: '#fff',
+                    height: 64,
+                    borderTopWidth: 1,
+                    borderTopColor: '#f5f5f5'
                 }}>
+                    <Image
+                        style={{
+                        height: 35,
+                        width: 35,
+                        marginLeft: 15,
+                        marginTop: 14.5
+                    }}
+                        source={this.props.item.icon}/>
                     <View
                         style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        marginLeft: 12
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        flex: 1
                     }}>
                         <View
                             style={{
-                            flexDirection: 'row'
+                            flex: 1,
+                            justifyContent: 'center',
+                            marginLeft: 12
                         }}>
+                            <View
+                                style={{
+                                flexDirection: 'row'
+                            }}>
+                                <Text
+                                    style={{
+                                    fontSize: 16,
+                                    color: '#333333'
+                                }}>{this.props.item.title}</Text>
+                                <Text
+                                    style={{
+                                    marginLeft: 6,
+                                    color: '#fff',
+                                    backgroundColor: '#CD853F'
+                                }}>推荐</Text>
+                            </View>
                             <Text
                                 style={{
-                                fontSize: 16,
-                                color: '#333333'
-                            }}>{this.props.item.title}</Text>
-                            <Text
-                                style={{
-                                marginLeft: 6,
-                                color: '#fff',
-                                backgroundColor: '#CD853F'
-                            }}>推荐</Text>
+                                marginTop: 6,
+                                fontSize: 12,
+                                color: '#999999'
+                            }}>{this.props.item.content}</Text>
                         </View>
-                        <Text
+                        <Image
                             style={{
-                            marginTop: 6,
-                            fontSize: 12,
-                            color: '#999999'
-                        }}>{this.props.item.content}</Text>
+                            height: 14,
+                            width: 8,
+                            marginRight: 15,
+                            marginTop: 25
+                        }}
+                            source={require('../assets/images/gray_right_arrow.png')}/>
                     </View>
-                    <Image
-                        style={{
-                        height: 14,
-                        width: 8,
-                        marginRight: 15,
-                        marginTop: 25
-                    }}
-                        source={require('../assets/images/gray_right_arrow.png')}/>
                 </View>
-            </View>
             </TouchableOpacity>
         );
     }
@@ -169,6 +170,7 @@ State > {
     }
 
     componentDidUpdate(prevProps : DialogProps) {
+        console.log('componentDidUpdate=> ' + this.props.visible + ',prevProps.visible=>' + prevProps.visible + '\n')
         if (this.props.visible !== prevProps.visible) {
             if (this.props.visible) {
                 this.show();
@@ -178,7 +180,7 @@ State > {
         }
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.clearTimer()
     }
 
@@ -196,13 +198,12 @@ State > {
             : null;
 
         const {dialogAnimation} = this.state;
-         let data = [
-             {
+        let data = [
+            {
                 icon: require('../assets/images/repay_mode_alipay.png'),
                 title: '一键还款',
                 content: '验证码支付安全快捷'
-            },
-            {
+            }, {
                 icon: require('../assets/images/repay_mode_alipay.png'),
                 title: '支付宝',
                 content: '仅限有支付宝账号用户使用'
@@ -214,7 +215,19 @@ State > {
         ]
         let cells = [];
         for (let i = 0; i < data.length; i++) {
-            cells.push(<Cell item={data[i]}  index={i} onPressItem={(selectIndex) => { alert(selectIndex)}}/>)
+            cells.push(<Cell
+                item={data[i]}
+                index={i}
+                onPressItem={(selectIndex) => {
+                if (this.props.selectCallBack) {
+                    this._setModalVisible(false);
+                    this.timer = setTimeout(() => {
+                        this
+                            .props
+                            .selectCallBack(selectIndex);
+                    }, 100);
+                }
+            }}/>)
         }
         return (
             <SafeAreaView>
@@ -261,7 +274,7 @@ State > {
                                 style={{
                                 justifyContent: 'center',
                                 height: 30,
-                                width: 60,
+                                width: 60
                             }}>
                                 <Image
                                     source={require('../assets/images/mask_close.png')}
@@ -290,6 +303,7 @@ State > {
     }
 
     show() : void {
+        console.log('show()=>\n');
         this.setState({modalVisible: true});
         this.timer = setTimeout(() => {
             LayoutAnimation.linear();
@@ -307,15 +321,17 @@ State > {
     }
 
     dismiss() : void {
+        console.log('dismiss()=>\n');
         LayoutAnimation.linear();
-            this.setState({containerY: -screenH})
+        this.setState({
+            containerY: -screenH
+        });
         this.timer = setTimeout(() => {
             this.setState({modalVisible: false});
         }, 100)
     }
 
-    clearTimer(){
-        alert('123')
+    clearTimer() {
         this.timer && clearTimeout(this.timer);
     }
 
