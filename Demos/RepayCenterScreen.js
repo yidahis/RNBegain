@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{ Component } from 'react';
 import {
     View,
     Text,
@@ -11,6 +11,7 @@ import {
     ScrollView
 } from 'react-native';
 import {Ionicons} from '@expo/vector-icons'
+import RepayModeView from '../Demos/RepayModeView'
 
 class SectionHeader extends React.Component {
     render() {
@@ -157,17 +158,27 @@ const CellStyles = {
 };
 
 export default class RepayCenterScreen extends React.Component {
+    
+    //还款方式
+    state = {
+        repayModeVisible: false,
+        text: '100.00',
+    };
+
     constructor(props) {
-        super(props);
-        this.state = {
-            text: '100.00'
-        };
+        super(props)
+        // this.closeRepayMode=this.props.closeRepayMode.bind(this)
+        this.setState=this.setState.bind(this)
     }
 
     static navigationOptions = {
         title: '还款',
         tabBarVisible: false
     };
+
+    componentDidUpdate(prevProps) {
+        console.log(prevProps)
+  }
 
     render() {
         return (
@@ -258,15 +269,21 @@ export default class RepayCenterScreen extends React.Component {
                         </View>
 
                     </TouchableHighlight>
-                    <TouchableHighlight>
+                    <TouchableHighlight onPress={() => {this.setState({repayModeVisible: true})} } underlayColor='#f5f5f5'>
                         <View style={styles.bottomButton}>
                             <Text style={styles.bottomText}>确认还款2700.00元</Text>
                         </View>
                     </TouchableHighlight>
                 </View>
+                <RepayModeView visible={this.state.repayModeVisible} callback={() => {this.setState({repayModeVisible: false})} }/>
             </SafeAreaView>
 
         );
+    }
+
+    closeRepayMode(){
+        alert(12313)
+        this.setState({repayModeVisible: false})
     }
 }
 
